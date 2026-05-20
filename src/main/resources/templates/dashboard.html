@@ -1,146 +1,912 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/layout :: head}" ></head>
+<head>
+
+    <th:block th:replace="~{fragments/layout :: head}"></th:block>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Modern Dashboard</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        :root{
+
+            --primary:#8b5cf6;
+            --secondary:#6366f1;
+            --success:#10b981;
+            --warning:#f59e0b;
+            --danger:#ef4444;
+        }
+
+        body{
+
+            font-family:'Poppins',sans-serif;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #020617,
+                            #0f172a,
+                            #1e1b4b,
+                            #111827
+                    );
+
+            background-size:400% 400%;
+
+            animation:bgMove 15s ease infinite;
+
+            min-height:100vh;
+
+            overflow-x:hidden;
+
+            color:white;
+        }
+
+        @keyframes bgMove{
+
+            0%{
+                background-position:0% 50%;
+            }
+
+            50%{
+                background-position:100% 50%;
+            }
+
+            100%{
+                background-position:0% 50%;
+            }
+        }
+
+        /* ORBS */
+
+        .orb{
+
+            position:fixed;
+
+            border-radius:50%;
+
+            filter:blur(90px);
+
+            z-index:-1;
+
+            animation:float 10s ease-in-out infinite;
+        }
+
+        .orb1{
+
+            width:320px;
+            height:320px;
+
+            background:rgba(139,92,246,.35);
+
+            top:-100px;
+            left:-100px;
+        }
+
+        .orb2{
+
+            width:260px;
+            height:260px;
+
+            background:rgba(59,130,246,.25);
+
+            right:-80px;
+            top:30%;
+
+            animation-delay:2s;
+        }
+
+        .orb3{
+
+            width:220px;
+            height:220px;
+
+            background:rgba(16,185,129,.20);
+
+            bottom:-60px;
+            left:40%;
+
+            animation-delay:4s;
+        }
+
+        @keyframes float{
+
+            0%,100%{
+                transform:translateY(0px);
+            }
+
+            50%{
+                transform:translateY(-25px);
+            }
+        }
+
+        /* REMOVE WHITE */
+
+        #wrapper,
+        #page-content-wrapper,
+        .container-fluid,
+        .table-responsive{
+
+            background:transparent !important;
+        }
+
+        .table > :not(caption) > * > *{
+
+            background-color:transparent !important;
+
+            box-shadow:none !important;
+        }
+
+        /* HERO */
+
+        .hero{
+
+            position:relative;
+
+            overflow:hidden;
+
+            border-radius:30px;
+
+            padding:40px;
+
+            margin-bottom:30px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(255,255,255,.12),
+                            rgba(255,255,255,.05)
+                    );
+
+            border:1px solid rgba(255,255,255,.10);
+
+            backdrop-filter:blur(20px);
+
+            box-shadow:
+                    0 20px 45px rgba(0,0,0,.25);
+
+            animation:fadeUp .8s ease;
+        }
+
+        .hero::before{
+
+            content:'';
+
+            position:absolute;
+
+            inset:0;
+
+            background:
+                    url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1974&auto=format&fit=crop');
+
+            background-size:cover;
+
+            background-position:center;
+
+            opacity:.10;
+        }
+
+        .hero-content{
+
+            position:relative;
+
+            z-index:2;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            flex-wrap:wrap;
+
+            gap:20px;
+        }
+
+        .hero-title{
+
+            font-size:3rem;
+
+            font-weight:700;
+
+            margin-bottom:10px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #c4b5fd,
+                            #8b5cf6
+                    );
+
+            background-size:200% auto;
+
+            background-clip:text;
+
+            -webkit-background-clip:text;
+
+            color:transparent;
+
+            -webkit-text-fill-color:transparent;
+
+            animation:gradientMove 5s linear infinite;
+        }
+
+        @keyframes gradientMove{
+
+            0%{
+                background-position:0% center;
+            }
+
+            100%{
+                background-position:200% center;
+            }
+        }
+
+        .hero-subtitle{
+
+            color:rgba(255,255,255,.75);
+
+            font-size:15px;
+        }
+
+        /* STATS CARDS */
+
+        .stats-card{
+
+            position:relative;
+
+            overflow:hidden;
+
+            border-radius:28px;
+
+            padding:28px;
+
+            height:100%;
+
+            backdrop-filter:blur(18px);
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(255,255,255,.12),
+                            rgba(255,255,255,.06)
+                    );
+
+            border:1px solid rgba(255,255,255,.12);
+
+            box-shadow:
+                    0 20px 45px rgba(0,0,0,.25);
+
+            transition:.4s ease;
+
+            animation:fadeUp 1s ease;
+        }
+
+        .stats-card:hover{
+
+            transform:
+                    translateY(-10px)
+                    scale(1.02);
+        }
+
+        .stats-card::before{
+
+            content:'';
+
+            position:absolute;
+
+            width:180px;
+            height:180px;
+
+            border-radius:50%;
+
+            background:rgba(255,255,255,.08);
+
+            top:-70px;
+            right:-70px;
+        }
+
+        .stats-title{
+
+            font-size:14px;
+
+            color:rgba(255,255,255,.75);
+        }
+
+        .stats-value{
+
+            font-size:2.4rem;
+
+            font-weight:700;
+
+            margin-top:8px;
+        }
+
+        .stats-icon{
+
+            font-size:3rem;
+
+            opacity:.7;
+        }
+
+        .gradient-purple{
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(139,92,246,.75),
+                            rgba(99,102,241,.75)
+                    );
+        }
+
+        .gradient-green{
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(16,185,129,.75),
+                            rgba(5,150,105,.75)
+                    );
+        }
+
+        .gradient-orange{
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(245,158,11,.75),
+                            rgba(251,146,60,.75)
+                    );
+        }
+
+        .gradient-pink{
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(236,72,153,.75),
+                            rgba(219,39,119,.75)
+                    );
+        }
+
+        /* TABLE CARD */
+
+        .table-card{
+
+            margin-top:30px;
+
+            border-radius:28px;
+
+            overflow:hidden;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(255,255,255,.10),
+                            rgba(255,255,255,.05)
+                    );
+
+            backdrop-filter:blur(18px);
+
+            border:1px solid rgba(255,255,255,.10);
+
+            box-shadow:
+                    0 20px 45px rgba(0,0,0,.25);
+
+            animation:fadeUp 1.1s ease;
+        }
+
+        .table-header{
+
+            padding:22px 28px;
+
+            border-bottom:
+                    1px solid rgba(255,255,255,.08);
+
+            font-size:1.2rem;
+
+            font-weight:600;
+        }
+
+        /* TABLE */
+
+        .table{
+
+            color:white;
+
+            margin-bottom:0;
+
+            border-collapse:separate;
+
+            border-spacing:0 14px;
+        }
+
+        .table thead th{
+
+            border:none;
+
+            color:rgba(255,255,255,.75);
+
+            text-transform:uppercase;
+
+            font-size:13px;
+
+            letter-spacing:1px;
+
+            padding:18px;
+        }
+
+        .table tbody tr{
+
+            background:
+                    rgba(15,23,42,.85);
+
+            border-radius:18px;
+
+            transition:.3s ease;
+        }
+
+        .table tbody tr:hover{
+
+            transform:translateY(-4px);
+
+            background:
+                    rgba(30,41,59,.95);
+        }
+
+        .table tbody td{
+
+            border:none;
+
+            color:white !important;
+
+            padding:20px 18px;
+
+            vertical-align:middle;
+
+            font-weight:500;
+        }
+
+        .table tbody tr td:first-child{
+
+            border-radius:18px 0 0 18px;
+        }
+
+        .table tbody tr td:last-child{
+
+            border-radius:0 18px 18px 0;
+        }
+
+        /* ACTION BUTTON */
+
+        .action-btn{
+
+            width:42px;
+            height:42px;
+
+            border-radius:12px;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #3b82f6,
+                            #2563eb
+                    );
+
+            color:white;
+
+            text-decoration:none;
+
+            transition:.3s ease;
+
+            box-shadow:
+                    0 8px 20px rgba(37,99,235,.35);
+        }
+
+        .action-btn:hover{
+
+            transform:translateY(-3px) scale(1.05);
+
+            color:white;
+        }
+
+        /* FOOTER */
+
+        footer{
+
+            margin-top:30px;
+
+            padding:25px;
+
+            text-align:center;
+
+            color:rgba(255,255,255,.6);
+
+            font-size:14px;
+        }
+
+        footer a{
+
+            color:#c4b5fd;
+
+            text-decoration:none;
+        }
+
+        footer a:hover{
+
+            color:white;
+        }
+
+        /* ANIMATION */
+
+        @keyframes fadeUp{
+
+            from{
+                opacity:0;
+                transform:translateY(30px);
+            }
+
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:768px){
+
+            .hero{
+                padding:28px;
+            }
+
+            .hero-title{
+                font-size:2rem;
+            }
+
+            .table{
+                min-width:700px;
+            }
+        }
+
+    </style>
+
+</head>
 
 <body>
 
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-            <div th:replace="~{fragments/layout :: sidebar}"></div>
+<!-- BACKGROUND ORBS -->
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-         	<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
 
-            <!-- Main Content -->
-            <div class="container-fluid px-4 py-4">
-                <h2 class="mb-4">Dashboard</h2>
+<div class="d-flex" id="wrapper">
 
-                <!-- Stats Cards -->
-                <div class="row g-4 mb-4">
-                    <div class="col-md-3">
-                        <div class="card bg-primary text-white h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title mb-0">Total Students</h6>
-                                        <h2 class="my-2" th:text="${dashboardStats != null ? dashboardStats.totalStudents : 0}"></h2>
-                                    </div>
-                                    <i class="bi bi-people fs-1 opacity-50"></i>
-                                </div>
-                            </div>
-                        </div>
+    <!-- SIDEBAR -->
+
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- PAGE CONTENT -->
+
+    <div id="page-content-wrapper">
+
+        <!-- NAVBAR -->
+
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- MAIN -->
+
+        <div class="container-fluid px-4 py-4">
+
+            <!-- HERO -->
+
+            <div class="hero">
+
+                <div class="hero-content">
+
+                    <div>
+
+                        <h1 class="hero-title">
+                            Dashboard
+                        </h1>
+
+                        <p class="hero-subtitle">
+                            Modern futuristic student management dashboard with analytics and enrollments.
+                        </p>
+
                     </div>
-                    <div class="col-md-3">
-                        <div class="card bg-success text-white h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title mb-0">Total Courses</h6>
-                                        <h2 class="my-2"th:text="${dashboardStats != null ? dashboardStats.totalCourses : 0}"></h2>
-                                    </div>
-                                    <i class="bi bi-book fs-1 opacity-50"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card bg-info text-dark h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title mb-0">Top Performing Courses</h6>
-                                        <h2 class="my-2" th:text="${dashboardStats != null ? dashboardStats.topPerformingCourse : 'N/A'}"></h2>
-                                    </div>
-                                    <i class="bi bi-trophy fs-1 opacity-50"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card bg-secondary text-white h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title mb-0">Students Enrolled This Month</h6>
-                                        <h2 class="my-2" th:text="${dashboardStats.studentsEnrolledThisMonth}"></h2>
-                                    </div>
-                                    <i class="bi bi-person-check fs-1 opacity-50"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
 
-                <!-- Recent Activity Table -->
-                <div class="card mb-4">
-                    <div class="card-header bg-white">
-                        <i class="bi bi-table me-1"></i>
-                        Recent Student Registrations
-                    </div>
-                    <div class="card-body">
-                        <div class="text-muted" th:if="${students.isEmpty()}">No course found</div>
-                         <div class="table-responsive" th:if="${!students.isEmpty()}">
-                            <table class="table table-hover table-striped align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Student Name</th>
-                                        <th>Email</th>
-                                        <th>Courses Count</th>
-                                        <th>Total Fee</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                      <tr th:each="student : ${students}">
-                                        <td data-label="ID" th:text="${student.studentId}"></td>
-                                        <td data-label="Name" th:text="${student.studentName}"></td>
-                                        <td data-label="Email" th:text="${student.email}"></td>
-                                        <td data-label="Courses Count" th:text="${student.courseCount}"></td>
-                                        <td data-label="Total Fee" th:text="${student.totalFee}"></td>
-                                        <td data-label="Actions">
-                                            <a th:href="@{/enrollments/getStudentEnrollmentDetails/{id}(id=${student.studentId}, source='dashboard')}" class="btn btn-sm btn-info text-white" title="View"><i class="bi bi-eye"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <!-- Footer -->
-            <footer class="py-4 bg-light mt-auto border-top">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Student Management System 2023</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
+            <!-- STATS -->
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-md-3">
+
+                    <div class="stats-card gradient-purple">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stats-title">
+                                    Total Students
+                                </div>
+
+                                <div class="stats-value"
+                                     th:text="${dashboardStats != null ? dashboardStats.totalStudents : 0}">
+                                    0
+                                </div>
+
+                            </div>
+
+                            <i class="bi bi-people-fill stats-icon"></i>
+
                         </div>
+
                     </div>
+
                 </div>
+
+                <div class="col-md-3">
+
+                    <div class="stats-card gradient-green">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stats-title">
+                                    Total Courses
+                                </div>
+
+                                <div class="stats-value"
+                                     th:text="${dashboardStats != null ? dashboardStats.totalCourses : 0}">
+                                    0
+                                </div>
+
+                            </div>
+
+                            <i class="bi bi-book-fill stats-icon"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="stats-card gradient-orange">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stats-title">
+                                    Top Performing Course
+                                </div>
+
+                                <div class="stats-value"
+                                     th:text="${dashboardStats != null ? dashboardStats.topPerformingCourse : 'N/A'}">
+                                    N/A
+                                </div>
+
+                            </div>
+
+                            <i class="bi bi-trophy-fill stats-icon"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="stats-card gradient-pink">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stats-title">
+                                    Students This Month
+                                </div>
+
+                                <div class="stats-value"
+                                     th:text="${dashboardStats.studentsEnrolledThisMonth}">
+                                    0
+                                </div>
+
+                            </div>
+
+                            <i class="bi bi-person-check-fill stats-icon"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="table-card">
+
+                <div class="table-header">
+
+                    <i class="bi bi-table me-2"></i>
+
+                    Recent Student Registrations
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="text-light"
+                         th:if="${students.isEmpty()}">
+
+                        No students found
+
+                    </div>
+
+                    <div class="table-responsive"
+                         th:if="${!students.isEmpty()}">
+
+                        <table class="table align-middle">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>Student Name</th>
+
+                                <th>Email</th>
+
+                                <th>Courses Count</th>
+
+                                <th>Total Fee</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            <tr th:each="student : ${students}">
+
+                                <td th:text="${student.studentId}">
+                                </td>
+
+                                <td th:text="${student.studentName}">
+                                </td>
+
+                                <td th:text="${student.email}">
+                                </td>
+
+                                <td th:text="${student.courseCount}">
+                                </td>
+
+                                <td>
+
+                                    ₹<span th:text="${student.totalFee}"></span>
+
+                                </td>
+
+                                <td>
+
+                                    <a th:href="@{/enrollments/getStudentEnrollmentDetails/{id}(id=${student.studentId}, source='dashboard')}"
+                                       class="action-btn">
+
+                                        <i class="bi bi-eye-fill"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+
+            <footer>
+
+                © 2026 Student Management System
+
+                <div class="mt-2">
+
+                    <a href="#">
+                        Privacy Policy
+                    </a>
+
+                    &nbsp;•&nbsp;
+
+                    <a href="#">
+                        Terms & Conditions
+                    </a>
+
+                </div>
+
             </footer>
+
         </div>
+
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Sidebar Toggle Script -->
-    <script>
-        window.addEventListener('DOMContentLoaded', event => {
-            const sidebarToggle = document.body.querySelector('#sidebarToggle');
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', event => {
-                    event.preventDefault();
-                    document.body.classList.toggle('sb-sidenav-toggled');
-                });
-            }
-        });
-    </script>
+</div>
+
+<!-- BOOTSTRAP -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- SIDEBAR TOGGLE -->
+
+<script>
+
+    window.addEventListener('DOMContentLoaded', event => {
+
+        const sidebarToggle =
+            document.body.querySelector('#sidebarToggle');
+
+        if (sidebarToggle) {
+
+            sidebarToggle.addEventListener('click', event => {
+
+                event.preventDefault();
+
+                document.body.classList.toggle('sb-sidenav-toggled');
+
+            });
+
+        }
+
+    });
+
+</script>
+
 </body>
 
 </html>

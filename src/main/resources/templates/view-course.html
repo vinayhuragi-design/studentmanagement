@@ -1,65 +1,752 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/layout :: head}" ></head>
+<head>
+
+    <th:block th:replace="~{fragments/layout :: head}"></th:block>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Course Details</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        :root{
+
+            --primary:#8b5cf6;
+            --secondary:#6366f1;
+            --success:#10b981;
+            --danger:#ef4444;
+
+            --glass:rgba(255,255,255,0.10);
+
+            --border:rgba(255,255,255,0.15);
+
+            --shadow:
+                    0 15px 45px rgba(0,0,0,.25);
+
+            --text:#ffffff;
+
+        }
+
+        body{
+
+            font-family:'Poppins',sans-serif;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #0f172a,
+                            #1e1b4b,
+                            #312e81,
+                            #0f172a
+                    );
+
+            background-size:400% 400%;
+
+            animation:bgMove 15s ease infinite;
+
+            min-height:100vh;
+
+            overflow-x:hidden;
+
+            color:white;
+
+        }
+
+        @keyframes bgMove{
+
+            0%{
+                background-position:0% 50%;
+            }
+
+            50%{
+                background-position:100% 50%;
+            }
+
+            100%{
+                background-position:0% 50%;
+            }
+
+        }
+
+        /* Floating background circles */
+
+        .orb{
+
+            position:fixed;
+
+            border-radius:50%;
+
+            filter:blur(90px);
+
+            z-index:-1;
+
+            animation:float 10s ease-in-out infinite;
+
+        }
+
+        .orb1{
+
+            width:320px;
+            height:320px;
+
+            background:rgba(139,92,246,.35);
+
+            top:-100px;
+            left:-80px;
+
+        }
+
+        .orb2{
+
+            width:280px;
+            height:280px;
+
+            background:rgba(16,185,129,.25);
+
+            bottom:-100px;
+            right:-80px;
+
+            animation-delay:2s;
+
+        }
+
+        @keyframes float{
+
+            0%,100%{
+                transform:translateY(0px);
+            }
+
+            50%{
+                transform:translateY(-30px);
+            }
+
+        }
+
+        #wrapper{
+            display:flex;
+            min-height:100vh;
+        }
+
+        #page-content-wrapper{
+            flex:1;
+            min-width:0;
+        }
+
+        /* HERO */
+
+        .hero{
+
+            margin:25px;
+
+            border-radius:35px;
+
+            overflow:hidden;
+
+            position:relative;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(255,255,255,.12),
+                            rgba(255,255,255,.05)
+                    );
+
+            border:1px solid rgba(255,255,255,.12);
+
+            backdrop-filter:blur(18px);
+
+            box-shadow:var(--shadow);
+
+            padding:45px;
+
+            animation:fadeUp .9s ease;
+
+        }
+
+        .hero::before{
+
+            content:'';
+
+            position:absolute;
+
+            inset:0;
+
+            background:
+                    url('https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=2070&auto=format&fit=crop');
+
+            background-size:cover;
+
+            background-position:center;
+
+            opacity:.12;
+
+        }
+
+        .hero-content{
+
+            position:relative;
+
+            z-index:2;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            flex-wrap:wrap;
+
+            gap:20px;
+
+        }
+
+        .hero-title{
+
+            font-size:3rem;
+
+            font-weight:700;
+
+            margin-bottom:10px;
+
+            background:
+                    linear-gradient(
+                            to right,
+                            #ffffff,
+                            #c4b5fd
+                    );
+
+            -webkit-background-clip:text;
+
+            -webkit-text-fill-color:transparent;
+
+        }
+
+        .hero-subtitle{
+
+            color:rgba(255,255,255,.7);
+
+            font-size:15px;
+
+        }
+
+        .back-btn{
+
+            display:inline-flex;
+
+            align-items:center;
+
+            gap:10px;
+
+            padding:14px 22px;
+
+            border-radius:100px;
+
+            text-decoration:none;
+
+            color:white;
+
+            font-weight:600;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #64748b,
+                            #475569
+                    );
+
+            transition:.3s ease;
+
+            box-shadow:
+                    0 10px 30px rgba(0,0,0,.3);
+
+        }
+
+        .back-btn:hover{
+
+            transform:translateY(-5px);
+
+            color:white;
+
+        }
+
+        /* COURSE CARD */
+
+        .course-card{
+
+            margin:0 25px 25px;
+
+            border-radius:35px;
+
+            overflow:hidden;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(255,255,255,.10),
+                            rgba(255,255,255,.05)
+                    );
+
+            border:1px solid rgba(255,255,255,.12);
+
+            backdrop-filter:blur(18px);
+
+            box-shadow:var(--shadow);
+
+            animation:fadeUp 1s ease;
+
+        }
+
+        .course-header{
+
+            padding:28px 35px;
+
+            border-bottom:1px solid rgba(255,255,255,.08);
+
+            display:flex;
+
+            align-items:center;
+
+            gap:15px;
+
+            font-size:1.3rem;
+
+            font-weight:600;
+
+        }
+
+        .course-header i{
+
+            font-size:1.5rem;
+
+            color:#c4b5fd;
+
+        }
+
+        .course-body{
+
+            padding:35px;
+
+        }
+
+        /* DETAIL ITEM */
+
+        .detail-item{
+
+            margin-bottom:22px;
+
+            padding:22px;
+
+            border-radius:22px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(255,255,255,.08),
+                            rgba(255,255,255,.03)
+                    );
+
+            border:1px solid rgba(255,255,255,.08);
+
+            transition:.3s ease;
+
+            animation:fadeUp 1s ease;
+
+        }
+
+        .detail-item:hover{
+
+            transform:translateY(-6px);
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(139,92,246,.20),
+                            rgba(99,102,241,.12)
+                    );
+
+        }
+
+        .detail-label{
+
+            font-size:13px;
+
+            text-transform:uppercase;
+
+            letter-spacing:1px;
+
+            color:rgba(255,255,255,.6);
+
+            margin-bottom:10px;
+
+            font-weight:600;
+
+        }
+
+        .detail-value{
+
+            font-size:1.1rem;
+
+            font-weight:500;
+
+            color:white;
+
+        }
+
+        /* STATUS */
+
+        .status-badge{
+
+            display:inline-block;
+
+            padding:8px 18px;
+
+            border-radius:100px;
+
+            font-size:14px;
+
+            font-weight:600;
+
+        }
+
+        .active-badge{
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #10b981,
+                            #059669
+                    );
+
+            color:white;
+
+            box-shadow:
+                    0 10px 25px rgba(16,185,129,.35);
+
+        }
+
+        .inactive-badge{
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #ef4444,
+                            #dc2626
+                    );
+
+            color:white;
+
+            box-shadow:
+                    0 10px 25px rgba(239,68,68,.35);
+
+        }
+
+        /* DESCRIPTION */
+
+        .description-box{
+
+            line-height:1.8;
+
+            color:rgba(255,255,255,.85);
+
+        }
+
+        /* FOOTER */
+
+        .course-footer{
+
+            padding:25px 35px;
+
+            border-top:1px solid rgba(255,255,255,.08);
+
+            text-align:right;
+
+        }
+
+        .edit-btn{
+
+            display:inline-flex;
+
+            align-items:center;
+
+            gap:10px;
+
+            padding:14px 26px;
+
+            border-radius:100px;
+
+            text-decoration:none;
+
+            color:white;
+
+            font-weight:600;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #f59e0b,
+                            #f97316
+                    );
+
+            transition:.3s ease;
+
+            box-shadow:
+                    0 10px 30px rgba(245,158,11,.35);
+
+        }
+
+        .edit-btn:hover{
+
+            transform:translateY(-5px);
+
+            color:white;
+
+        }
+
+        /* ANIMATION */
+
+        @keyframes fadeUp{
+
+            from{
+                opacity:0;
+                transform:translateY(30px);
+            }
+
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:768px){
+
+            .hero{
+
+                padding:28px;
+
+            }
+
+            .hero-title{
+
+                font-size:2rem;
+
+            }
+
+            .course-body{
+
+                padding:22px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
 
 <body>
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-          <div th:replace="~{fragments/layout :: sidebar}"></div>
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div th:replace="~{fragments/layout :: navbar}"></div>
+<!-- FLOATING EFFECTS -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
 
-            <div class="container-fluid px-4 py-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Course Details</h2>
-                    <a th:href="@{/course/list}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i> Back to
-                        List</a>
+<div class="d-flex" id="wrapper">
+
+    <!-- SIDEBAR -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- PAGE CONTENT -->
+    <div id="page-content-wrapper">
+
+        <!-- NAVBAR -->
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- HERO -->
+        <div class="hero">
+
+            <div class="hero-content">
+
+                <div>
+
+                    <h1 class="hero-title">
+                        Course Details
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        Explore detailed information about the selected course.
+                    </p>
+
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-header bg-white">
-                        <i class="bi bi-info-circle me-1"></i> Information
-                    </div>
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-3 fw-bold">Course Name:</div>
-                            <div class="col-md-9" th:text="${course.courseName}"></div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-3 fw-bold">Course Code:</div>
-                            <div class="col-md-9" th:text="${course.courseCode}"></div>
-                        </div>
-						 <div class="row mb-3">
-                            <div class="col-md-3 fw-bold">Course Fee:</div>
-                            <div class="col-md-9" th:text="${course.fee}"></div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-3 fw-bold">Duration:</div>
-                            <div class="col-md-9" th:text="${course.duration}"></div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-3 fw-bold">Is Active:</div>
-                            <div class="col-md-9" th:text="${course.active} ? 'Yes' : 'No'"></div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-3 fw-bold">Description:</div>
-                            <div class="col-md-9">
-                                <p th:text="${course.description}"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <a th:href="@{'/course/' + ${course.id} + '/edit'}" class="btn btn-warning text-white"><i class="bi bi-pencil me-1"></i>
-                            Edit Course</a>
-                    </div>
-                </div>
+                <a th:href="@{/course/list}" class="back-btn">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back To List
+
+                </a>
+
             </div>
+
         </div>
+
+        <!-- COURSE CARD -->
+        <div class="course-card">
+
+            <div class="course-header">
+
+                <i class="bi bi-journal-bookmark-fill"></i>
+
+                Course Information
+
+            </div>
+
+            <div class="course-body">
+
+                <!-- Course Name -->
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Course Name
+                    </div>
+
+                    <div class="detail-value"
+                         th:text="${course.courseName}">
+                        Java Full Stack
+                    </div>
+
+                </div>
+
+                <!-- Course Code -->
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Course Code
+                    </div>
+
+                    <div class="detail-value"
+                         th:text="${course.courseCode}">
+                        JAVA101
+                    </div>
+
+                </div>
+
+                <!-- Course Fee -->
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Course Fee
+                    </div>
+
+                    <div class="detail-value">
+
+                        ₹<span th:text="${course.fee}">5000</span>
+
+                    </div>
+
+                </div>
+
+                <!-- Duration -->
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Duration
+                    </div>
+
+                    <div class="detail-value"
+                         th:text="${course.duration}">
+                        6 Months
+                    </div>
+
+                </div>
+
+                <!-- Status -->
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Status
+                    </div>
+
+                    <div class="detail-value">
+
+                        <span th:if="${course.active}"
+                              class="status-badge active-badge">
+
+                            Active
+
+                        </span>
+
+                        <span th:unless="${course.active}"
+                              class="status-badge inactive-badge">
+
+                            Inactive
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- Description -->
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Description
+                    </div>
+
+                    <div class="description-box"
+                         th:text="${course.description}">
+
+                        Course description goes here.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="course-footer">
+
+                <a th:href="@{'/course/' + ${course.id} + '/edit'}"
+                   class="edit-btn">
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    Edit Course
+
+                </a>
+
+            </div>
+
+        </div>
+
     </div>
-    <div th:replace="~{fragments/layout :: scripts}"></div>
+
+</div>
+
+<!-- SCRIPTS -->
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
 </body>
 
 </html>

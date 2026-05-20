@@ -1,100 +1,809 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/layout :: head}" ></head>
+<head>
+    <div th:replace="~{fragments/layout :: head}"></div>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Student</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        :root{
+
+            --primary:#7c3aed;
+            --secondary:#4f46e5;
+            --success:#10b981;
+            --danger:#ef4444;
+
+            --dark:#0f172a;
+            --light:#f8fafc;
+
+            --glass:rgba(255,255,255,0.12);
+
+            --shadow:
+                    0 20px 45px rgba(0,0,0,.12);
+
+        }
+
+        body{
+
+            font-family:'Poppins',sans-serif;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #eef2ff,
+                            #f8fafc,
+                            #ede9fe,
+                            #e0f2fe
+                    );
+
+            background-size:400% 400%;
+
+            animation:bgMove 14s ease infinite;
+
+            min-height:100vh;
+
+            overflow-x:hidden;
+
+            color:#0f172a;
+
+            position:relative;
+
+        }
+
+        @keyframes bgMove{
+
+            0%{
+                background-position:0% 50%;
+            }
+
+            50%{
+                background-position:100% 50%;
+            }
+
+            100%{
+                background-position:0% 50%;
+            }
+
+        }
+
+        /* =====================================================
+           FLOATING ORBS
+        ===================================================== */
+
+        .orb{
+
+            position:fixed;
+
+            border-radius:50%;
+
+            filter:blur(90px);
+
+            z-index:0;
+
+            animation:float 10s ease-in-out infinite;
+
+        }
+
+        .orb1{
+
+            width:300px;
+            height:300px;
+
+            background:rgba(124,58,237,.20);
+
+            top:-100px;
+            left:-100px;
+
+        }
+
+        .orb2{
+
+            width:260px;
+            height:260px;
+
+            background:rgba(59,130,246,.18);
+
+            top:40%;
+            right:-90px;
+
+            animation-delay:2s;
+
+        }
+
+        .orb3{
+
+            width:240px;
+            height:240px;
+
+            background:rgba(16,185,129,.16);
+
+            bottom:-70px;
+            left:35%;
+
+            animation-delay:4s;
+
+        }
+
+        @keyframes float{
+
+            0%,100%{
+                transform:translateY(0px);
+            }
+
+            50%{
+                transform:translateY(-25px);
+            }
+
+        }
+
+        /* =====================================================
+           LAYOUT
+        ===================================================== */
+
+        #wrapper{
+            display:flex;
+            min-height:100vh;
+            position:relative;
+            z-index:2;
+        }
+
+        #page-content-wrapper{
+            flex:1;
+            min-width:0;
+        }
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .page-header{
+
+            margin-bottom:28px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            flex-wrap:wrap;
+
+            gap:16px;
+
+        }
+
+        .page-title{
+
+            font-size:2rem;
+
+            font-weight:700;
+
+            color:#111827;
+
+            display:flex;
+
+            align-items:center;
+
+            gap:14px;
+
+        }
+
+        .page-title i{
+
+            width:55px;
+            height:55px;
+
+            border-radius:18px;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #8b5cf6,
+                            #6366f1
+                    );
+
+            color:white;
+
+            box-shadow:
+                    0 10px 25px rgba(99,102,241,.35);
+
+        }
+
+        .page-subtitle{
+
+            color:#64748b;
+
+            margin-top:8px;
+
+            font-size:14px;
+
+        }
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .btn-modern{
+
+            border:none;
+
+            border-radius:14px;
+
+            padding:12px 22px;
+
+            font-weight:600;
+
+            transition:.3s ease;
+
+            text-decoration:none;
+
+            display:inline-flex;
+
+            align-items:center;
+
+            gap:10px;
+
+        }
+
+        .btn-back{
+
+            background:white;
+
+            color:#334155;
+
+            border:1px solid #e2e8f0;
+
+            box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+        }
+
+        .btn-back:hover{
+
+            transform:translateY(-3px);
+
+            color:#111827;
+
+        }
+
+        .btn-save{
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #8b5cf6,
+                            #6366f1
+                    );
+
+            color:white;
+
+            box-shadow:
+                    0 12px 25px rgba(99,102,241,.30);
+
+        }
+
+        .btn-save:hover{
+
+            transform:translateY(-3px);
+
+            color:white;
+
+        }
+
+        .btn-reset{
+
+            background:#f1f5f9;
+
+            color:#475569;
+
+        }
+
+        .btn-reset:hover{
+
+            background:#e2e8f0;
+
+        }
+
+        /* =====================================================
+           FORM CARD
+        ===================================================== */
+
+        .form-card{
+
+            position:relative;
+
+            overflow:hidden;
+
+            background:rgba(255,255,255,.70);
+
+            backdrop-filter:blur(18px);
+
+            border-radius:30px;
+
+            padding:35px;
+
+            border:1px solid rgba(255,255,255,.6);
+
+            box-shadow:var(--shadow);
+
+        }
+
+        .form-card::before{
+
+            content:'';
+
+            position:absolute;
+
+            inset:0;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(124,58,237,.06),
+                            rgba(59,130,246,.05)
+                    );
+
+            pointer-events:none;
+
+        }
+
+        .form-card > *{
+            position:relative;
+            z-index:2;
+        }
+
+        .card-heading{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:12px;
+
+            margin-bottom:28px;
+
+            font-size:1.25rem;
+
+            font-weight:700;
+
+            color:#111827;
+
+        }
+
+        .card-heading i{
+
+            color:#7c3aed;
+
+            font-size:1.3rem;
+
+        }
+
+        /* =====================================================
+           FORM ELEMENTS
+        ===================================================== */
+
+        .form-label{
+
+            font-weight:600;
+
+            color:#334155;
+
+            margin-bottom:10px;
+
+        }
+
+        .form-control{
+
+            border:none;
+
+            border-radius:16px;
+
+            padding:14px 16px;
+
+            background:rgba(255,255,255,.9);
+
+            border:1px solid #e2e8f0;
+
+            transition:.3s ease;
+
+            box-shadow:none;
+
+        }
+
+        .form-control:focus{
+
+            border-color:#8b5cf6;
+
+            box-shadow:
+                    0 0 0 5px rgba(139,92,246,.15);
+
+        }
+
+        textarea.form-control{
+            resize:none;
+        }
+
+        /* =====================================================
+           INPUT ICON WRAPPER
+        ===================================================== */
+
+        .input-group-modern{
+
+            position:relative;
+
+        }
+
+        .input-group-modern i{
+
+            position:absolute;
+
+            top:50%;
+            left:16px;
+
+            transform:translateY(-50%);
+
+            color:#94a3b8;
+
+            z-index:3;
+
+        }
+
+        .input-group-modern .form-control{
+
+            padding-left:45px;
+
+        }
+
+        /* =====================================================
+           VALIDATION
+        ===================================================== */
+
+        .invalid-feedback{
+
+            display:block;
+
+            margin-top:6px;
+
+            font-size:13px;
+
+        }
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .form-actions{
+
+            margin-top:30px;
+
+            display:flex;
+
+            justify-content:flex-end;
+
+            gap:14px;
+
+            flex-wrap:wrap;
+
+        }
+
+        /* =====================================================
+           ANIMATION
+        ===================================================== */
+
+        .fade-up{
+
+            animation:fadeUp .8s ease;
+
+        }
+
+        @keyframes fadeUp{
+
+            from{
+                opacity:0;
+                transform:translateY(25px);
+            }
+
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:768px){
+
+            .form-card{
+                padding:24px;
+            }
+
+            .page-title{
+                font-size:1.6rem;
+            }
+
+        }
+
+    </style>
+
+</head>
 
 <body>
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-        <div th:replace="~{fragments/layout :: sidebar}"></div>
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div th:replace="~{fragments/layout :: navbar}"></div>
+<!-- BACKGROUND ORBS -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
 
-            <div class="container-fluid px-4 py-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Add New Student</h2>
-                    <a th:href="@{/students/list}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i> Back to
-                        List</a>
+<div class="d-flex" id="wrapper">
+
+    <!-- SIDEBAR -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- PAGE CONTENT -->
+    <div id="page-content-wrapper">
+
+        <!-- NAVBAR -->
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- MAIN CONTENT -->
+        <div class="container-fluid px-4 py-4 fade-up">
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+
+                <div>
+
+                    <h1 class="page-title">
+
+                        <i class="bi bi-person-plus-fill"></i>
+
+                        Add New Student
+
+                    </h1>
+
+                    <p class="page-subtitle">
+                        Create and manage student records with modern UI experience.
+                    </p>
+
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-header bg-white">
-                        <i class="bi bi-person-plus me-1"></i> Student Details
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/students/save}" method="post" th:object="${studentDto}">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" 
-                                    	th:field="*{firstName}"
-                                    	th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
-                                    	placeholder="e.g. John">
-                                    	
-                                    	 <div class="invalid-feedback"
-		                                    th:if="${#fields.hasErrors('firstName')}"
-		                                    th:errors="*{firstName}">
-		                                </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="lastName" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" 
-                                    th:field="*{lastName}"
-                                      	th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
-                                    placeholder="e.g. Doe" >
-                                        
-                                         <div class="invalid-feedback"
-		                                    th:if="${#fields.hasErrors('lastName')}"
-		                                    th:errors="*{lastName}">
-		                                </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="email"
-                                    		th:field="*{email}"
-                                        	th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
-                                        placeholder="e.g. john.doe@example.com" >
-                                        
-                                        <div class="invalid-feedback"
-		                                    th:if="${#fields.hasErrors('email')}"
-		                                    th:errors="*{email}">
-		                                </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="phone" class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="phone"
-                                    th:field="*{phoneNumber}"
-                                        placeholder="e.g. +1 234 567 8900">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <textarea class="form-control" id="address" rows="3"
-                                th:field="*{address}"
-                                	th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
-                                    placeholder="Enter full address..."></textarea>
-                                    
-                                     <div class="invalid-feedback"
-		                                    th:if="${#fields.hasErrors('address')}"
-		                                    th:errors="*{address}">
-		                                </div>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="reset" class="btn btn-light me-2">Reset</button>
-                                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Save
-                                    Student</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                <a th:href="@{/students/list}"
+                   class="btn-modern btn-back">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to List
+
+                </a>
+
             </div>
+
+            <!-- FORM CARD -->
+            <div class="form-card">
+
+                <div class="card-heading">
+
+                    <i class="bi bi-mortarboard-fill"></i>
+
+                    Student Details
+
+                </div>
+
+                <form th:action="@{/students/save}"
+                      method="post"
+                      th:object="${studentDto}">
+
+                    <!-- ROW 1 -->
+                    <div class="row g-4 mb-3">
+
+                        <!-- FIRST NAME -->
+                        <div class="col-md-6">
+
+                            <label for="firstName"
+                                   class="form-label">
+
+                                First Name
+
+                            </label>
+
+                            <div class="input-group-modern">
+
+                                <i class="bi bi-person"></i>
+
+                                <input type="text"
+                                       id="firstName"
+                                       class="form-control"
+                                       th:field="*{firstName}"
+                                       th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
+                                       placeholder="Enter first name">
+
+                            </div>
+
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('firstName')}"
+                                 th:errors="*{firstName}">
+                            </div>
+
+                        </div>
+
+                        <!-- LAST NAME -->
+                        <div class="col-md-6">
+
+                            <label for="lastName"
+                                   class="form-label">
+
+                                Last Name
+
+                            </label>
+
+                            <div class="input-group-modern">
+
+                                <i class="bi bi-person-badge"></i>
+
+                                <input type="text"
+                                       id="lastName"
+                                       class="form-control"
+                                       th:field="*{lastName}"
+                                       th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
+                                       placeholder="Enter last name">
+
+                            </div>
+
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('lastName')}"
+                                 th:errors="*{lastName}">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ROW 2 -->
+                    <div class="row g-4 mb-3">
+
+                        <!-- EMAIL -->
+                        <div class="col-md-6">
+
+                            <label for="email"
+                                   class="form-label">
+
+                                Email Address
+
+                            </label>
+
+                            <div class="input-group-modern">
+
+                                <i class="bi bi-envelope"></i>
+
+                                <input type="email"
+                                       id="email"
+                                       class="form-control"
+                                       th:field="*{email}"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                       placeholder="john@example.com">
+
+                            </div>
+
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('email')}"
+                                 th:errors="*{email}">
+                            </div>
+
+                        </div>
+
+                        <!-- PHONE -->
+                        <div class="col-md-6">
+
+                            <label for="phone"
+                                   class="form-label">
+
+                                Phone Number
+
+                            </label>
+
+                            <div class="input-group-modern">
+
+                                <i class="bi bi-telephone"></i>
+
+                                <input type="tel"
+                                       id="phone"
+                                       class="form-control"
+                                       th:field="*{phoneNumber}"
+                                       placeholder="+91 9876543210">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ADDRESS -->
+                    <div class="mb-3">
+
+                        <label for="address"
+                               class="form-label">
+
+                            Address
+
+                        </label>
+
+                        <textarea id="address"
+                                  rows="4"
+                                  class="form-control"
+                                  th:field="*{address}"
+                                  th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
+                                  placeholder="Enter full address..."></textarea>
+
+                        <div class="invalid-feedback"
+                             th:if="${#fields.hasErrors('address')}"
+                             th:errors="*{address}">
+                        </div>
+
+                    </div>
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="form-actions">
+
+                        <button type="reset"
+                                class="btn-modern btn-reset">
+
+                            <i class="bi bi-arrow-counterclockwise"></i>
+
+                            Reset
+
+                        </button>
+
+                        <button type="submit"
+                                class="btn-modern btn-save">
+
+                            <i class="bi bi-save-fill"></i>
+
+                            Save Student
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
         </div>
+
     </div>
-     <div th:replace="~{fragments/layout :: scripts}"></div>
+
+</div>
+
+<!-- SCRIPTS -->
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
 </body>
 
 </html>
